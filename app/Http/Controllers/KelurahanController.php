@@ -13,10 +13,4 @@ class KelurahanController extends Controller
     $warga = Penduduk::all();
     return view('penduduk_index', compact('warga'));
     }
-
-    public function daftarSurat() {
-    // Eager Loading relasi penduduk untuk menghemat query
-    $semuaSurat = Surat::with('penduduk')->get();
-    return view('surat_index', compact('semuaSurat'));
-    }
 }
