@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+@extends('layouts.index')
+
+@section('judul', 'Pengajuan Surat')
+
+@section('konten')
     <div class="card p-4">
         <h3>Daftar Pengajuan Surat Kelurahan</h3>
         <table class="table table-striped table-bordered mt-3">
@@ -31,5 +28,4 @@
                 </tbody>
         </table>
     </div>
-</body>
-</html>
+@endsection

@@ -35,4 +35,7 @@ class PendudukSeeder extends Seeder
         'alamat' => 'Jl. Mawar No. 51, RT 14 RW 44'
         ]);
     }
+
+    
+
 }
