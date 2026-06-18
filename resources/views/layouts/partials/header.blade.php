@@ -265,7 +265,15 @@
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
                   <a href="#" class="btn btn-outline-secondary">Profile</a>
-                  <a href="#" class="btn btn-outline-danger float-end">Sign out</a>
+                  <!-- Tombol LogOut -->
+                  <!-- <a href="{{route('logout')}}"  method='POST' class="btn btn-outline-danger float-end">Sign out</a> -->
+                  <form action="{{ route('logout') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data surat ini?')" class="d-inline">
+                                @csrf
+                                @method('POST')
+                                <button type="submit" class="btn btn-outline-danger float-end">
+                                    <i class="fas fa-trash"></i> Log Out
+                                </button>
+                    </form>
                 </li>
                 <!--end::Menu Footer-->
               </ul>
