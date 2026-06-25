@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Penduduk;
 use App\Models\Surat;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class SuratController extends Controller
@@ -34,18 +35,20 @@ class SuratController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Eksekusi Aturan Validasi Server-Side
-        $validatedData = $request->validate([
-        'nomor_surat' => 'required|unique:surats,nomor_surat|max:50',
+    $validatedData = $request->validate([
+        'nomor_surat' => 'required|unique:surats,nomor_surat',
         'jenis_surat' => 'required',
-        'penduduk_id' => 'required|numeric',
+        'penduduk_id' => 'required',
         'tanggal_ajuan' => 'required|date',
-        ], [
-        'nomor_surat.required' => 'Nomor surat wajib diisi.',
-        'nomor_surat.unique' => 'Nomor surat tersebut sudah terdaftar di sistem.',
-        'jenis_surat.required' => 'Silakan pilih jenis surat.',
-        'penduduk_id.required' => 'Warga pemohon wajib dipilih.',
-        ]);
+        'berkas_pendukung' => 'nullable|file|mimes:jpg,png,pdf|max:2048'
+    ]);
+
+    if ($request->hasFile('berkas_pendukung')) {
+        $namaFile = time() . '_' . $request->file('berkas_pendukung')->getClientOriginalName();
+        $path = $request->file('berkas_pendukung')->storeAs('berkas_surat', $namaFile, 'public');
+
+        $validatedData['berkas_pendukung'] = $path;
+    }
 
         // 2. Simpan ke Database Menggunakan Mass Assignment Eloquent
         Surat::create($validatedData);
@@ -113,4 +116,15 @@ class SuratController extends Controller
         // Kembalikan ke halaman index dengan alert flash message pemberitahuan
         return redirect()->route('surat.index')->with('sukses', 'Data surat berhasil dihapus dari sistem.');
     }
+
+    // Controller cetak pdf
+    public function cetakPdf($id)
+    {
+    $surat = Surat::findOrFail($id);
+
+    $pdf = Pdf::loadView('surat.cetak', compact('surat'));
+
+    return $pdf->stream('Surat_Kelurahan_' and $surat->nomor_surat . '.pdf');
+    }
+
 }

@@ -25,16 +25,5 @@
             @endforeach
         </tbody>
         </table>
-        <table>
-            <tbody>
-                @foreach($user as $u)
-                <tr>
-                    <td>{{$u->name}}</td>
-                    <td>{{$u->email}}</td>
-                    <td>{{$u->password}}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
     </div>
 @endsection

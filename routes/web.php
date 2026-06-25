@@ -15,6 +15,15 @@ Route::get('/penduduk', [KelurahanController::class, 'dataPenduduk']);
 // Sudah menggunakan Routingnya resources otomatis
 // Route::get('/surat', [KelurahanController::class, 'daftarSurat']);
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/surat/{id}/cetak', [SuratController::class, 'cetakPdf'])->name('surat.cetak');
+
+    Route::resource('surat', SuratController::class);
+});
+
+
 // Routing Resources
 Route::resource('surat', SuratController::class);
 
@@ -24,13 +33,4 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [AuthController::class, 'processLogin'])->name('login.auth');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store');
-});
- 
-// Group 2: Isolasi Keamanan Khusus untuk Pengguna yang Telah Sukses Terautentikasi
-Route::middleware(['auth'])->group(function () {
-    // // Penanganan Aksi Keluar Aplikasi
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
- 
-    // // Proteksi Total Rute CRUD Surat Aplikasi Simpel-K dari Serangan Manipulasi Tembak URL
-    Route::resource('surat', SuratController::class);
 });
